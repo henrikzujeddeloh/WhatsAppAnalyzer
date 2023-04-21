@@ -47,7 +47,34 @@ def create_df(path):
                         i += 1
     return data_frame
 
+def show_heatmap(data_frame):
+    
+    data_frame['weekday'] = data_frame['timestamp'].dt.day_name()
+
+    week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    data_frame['weekday'] = pd.Categorical(data_frame['weekday'], categories=week_days, ordered=True)
+    data_frame = data_frame.sort_values('weekday')
+
+    data_frame['hour'] = data_frame['timestamp'].dt.hour
+
+    hour_weekday = data_frame.groupby(["weekday", "hour"]).size().unstack()
+
+    fig_heatmap, axs_heatmap = plt.subplots(figsize=[WIDTH,HEIGHT])
+    sns.heatmap(hour_weekday, cmap="Blues", ax=axs_heatmap)
+    axs_heatmap.set_title("Message Heatmap")
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--heatmap", help="output heatmap of message send time", action="store_true")
+args = parser.parse_args()
+
+
 df = create_df(DATA_DIR)
 
-print(df)
 
+if args.heatmap:
+    show_heatmap(df)
+
+
+print(df)
+plt.show()
