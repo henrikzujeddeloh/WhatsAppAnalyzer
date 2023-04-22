@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from progressbar import ProgressBar, Percentage, Bar
+
 
 DATA_DIR = "data/"
 FILE_NAME = "_chat.txt"
@@ -33,6 +35,9 @@ def create_df(path):
             f = os.path.join(directory, filename)
             with open(f, "r") as file:
                 i = 0
+                print("Reading file...")
+                num_lines = sum(1 for line in open(f))
+                pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=num_lines).start()
                 for line in file:
                         stripped_line = line.strip()
                         if not stripped_line == "" and stripped_line[0] == '[':
@@ -47,6 +52,8 @@ def create_df(path):
                         data_frame.loc[i] = [date, person, message]
                         #print(data_frame.loc[i])
                         i += 1
+                        pbar.update(i)
+                pbar.finish()
     return data_frame
 
 def show_heatmap(data_frame):
