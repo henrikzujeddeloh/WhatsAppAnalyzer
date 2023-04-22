@@ -8,6 +8,8 @@ import seaborn as sns
 DATA_DIR = "data/"
 FILE_NAME = "_chat.txt"
 
+BIN_WIDTH = 5
+
 WIDTH = 10
 HEIGHT = 5
 
@@ -64,17 +66,63 @@ def show_heatmap(data_frame):
     axs_heatmap.set_title("Message Heatmap")
 
 
+def show_date(data_frame):
+    
+    data_frame['date'] = data_frame['timestamp'].dt.date
+
+    data_frame = data_frame.groupby(['date']).size()
+    min_date = data_frame.index.min()
+    max_date = data_frame.index.max()
+    date_range = pd.date_range(min_date, max_date)
+    data_frame.index = pd.DatetimeIndex(data_frame.index)
+    data_frame = data_frame.reindex(date_range, fill_value=0)
+
+    # creates plot of note creation by date
+    fig_date, axs_date = plt.subplots(figsize=[WIDTH,HEIGHT])
+    data_frame.plot(ax=axs_date, kind='line', linewidth=1, color='#63abdb', title="Message history", xlabel="Date", ylabel="Count")
+
+def show_person(data_frame):
+    
+    data_frame = data_frame.groupby(['person']).size()
+
+    fig_person, axs_person = plt.subplots(figsize=[WIDTH,HEIGHT])
+    person = data_frame.plot(kind='bar', ax=axs_person, title="Messages per personn", xlabel="Person", ylabel="Count", rot=0)
+    person.bar_label(person.containers[0])
+
+def show_words(data_frame):
+    
+
+    data_frame['words'] = df['message'].str.count(' ').add(1)
+    
+    print("Average message length: " + str(round(data_frame['words'].mean(), 1))+ " words")
+
+    bins = np.arange(0, data_frame['words'].max()+BIN_WIDTH, BIN_WIDTH)
+
+    fig_words, axs_words = plt.subplots(figsize=[WIDTH,HEIGHT])
+    data_frame['words'].plot.hist(ax=axs_words, bins=bins)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--heatmap", help="output heatmap of message send time", action="store_true")
+parser.add_argument("--date", help="output history of messsage send time", action="store_true")
+parser.add_argument("--person", help="output messages sent by person", action="store_true")
+parser.add_argument("--words", help="output average words per message by person", action="store_true")
 args = parser.parse_args()
+
 
 
 df = create_df(DATA_DIR)
 
+print(str(len(df.index)) + " messages sent")
 
 if args.heatmap:
     show_heatmap(df)
+if args.date:
+    show_date(df)
+if args.person:
+    show_person(df)
+if args.words:
+    show_words(df)
 
-
-print(df)
+#print(df)
 plt.show()
