@@ -5,7 +5,7 @@ A program to analyze a WhatsApp chat and generate some interesting statistics an
 
 Export the WhatsApp chat by going to the chat details > Export Chat > Without Media and save it to the `data/` directory in this repo.
 
-Run ´python main.py´ with any arguments of visualizations you want to generate.
+Run `python main.py` with any arguments of visualizations you want to generate.
 
 A list of possible arguments are listed below.
 
@@ -13,8 +13,11 @@ A list of possible arguments are listed below.
 
 | Argument | Description |
 | --- | --- |
-| `--heatmap` | shows heatmap of messages sent per week day and hour |
-|`--date` | shows graph of messages sent per day |
-|`--person`| shows bar graph of number of messages sent per person |
-|`--words` | shows histogram of message word length |
+| `--heatmap`| shows heatmap of messages sent per week day and hour |
+| `--date`| shows graph of messages sent per day |
+| `--person` | shows bar graph of number of messages sent per person |
+| `--words` | shows histogram of message word length |
+| `--wordcloud` | shows wordcloud of all messages sent |
 
+
+[TODO](TODO.md)

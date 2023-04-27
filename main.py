@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from wordcloud import WordCloud, STOPWORDS
 from progressbar import ProgressBar, Percentage, Bar
 
 
@@ -109,11 +110,33 @@ def show_words(data_frame):
     data_frame['words'].plot.hist(ax=axs_words, bins=bins)
 
 
+
+def show_wordcloud(data_frame):
+   
+    ignore_words_str = "und der die das dann noch ist"
+    ignore_list = ignore_words_str.split()
+    
+    data_frame['message'] = data_frame['message'].astype('string')
+
+    text = data_frame['message'].values
+    unique_string = (" ").join(text)
+
+    STOPWORDS.update(ignore_list)
+    wordcloud = WordCloud(width=1000, height=500, background_color="white").generate(str(unique_string))
+
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+
+
+
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--heatmap", help="output heatmap of message send time", action="store_true")
 parser.add_argument("--date", help="output history of messsage send time", action="store_true")
 parser.add_argument("--person", help="output messages sent by person", action="store_true")
 parser.add_argument("--words", help="output average words per message by person", action="store_true")
+parser.add_argument("--wordcloud", help="outputs wordcloud of all words written", action="store_true")
 args = parser.parse_args()
 
 
@@ -130,6 +153,9 @@ if args.person:
     show_person(df)
 if args.words:
     show_words(df)
+if args.wordcloud:
+    show_wordcloud(df)
+
 
 #print(df)
 plt.show()
