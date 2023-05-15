@@ -41,15 +41,14 @@ def create_df(path):
                 pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=num_lines).start()
                 for line in file:
                         stripped_line = line.strip()
-                        if not stripped_line == "" and stripped_line[0] == '[':
+                        if not stripped_line == "" and stripped_line[0] == '[' and stripped_line.find("omitted") == -1:
                             date = pd.to_datetime(get_date(stripped_line), format='%d.%m.%y, %H:%M:%S')
                             person = get_person(stripped_line[21:])
                             message = get_message(stripped_line[21:])
-                        elif not stripped_line == "":
+                        elif not stripped_line == "" and stripped_line.find("omitted") == -1:
                             date = pd.to_datetime(data_frame.loc[i-1]['timestamp'], format='%d.%m.%y, %H:%M:%S')
                             person = data_frame.loc[i-1]['person']
                             message = stripped_line
-
                         data_frame.loc[i] = [date, person, message]
                         #print(data_frame.loc[i])
                         i += 1
@@ -113,7 +112,7 @@ def show_words(data_frame):
 
 def show_wordcloud(data_frame):
    
-    ignore_words_str = "und der die das dann noch ist"
+    ignore_words_str = "und der die das dann noch ist ja aber auch jetzt oder ich du nicht vor nach zu bei uns wir den dem denn schon da bin war hab sind wenn mit auf dir haben machen mal gut ein mir dich e es sehr nur für wieder heute wie kann"
     ignore_list = ignore_words_str.split()
     
     data_frame['message'] = data_frame['message'].astype('string')
