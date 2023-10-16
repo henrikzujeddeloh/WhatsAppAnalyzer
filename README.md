@@ -1,11 +1,14 @@
 # WhatsApp Analyzer
 A program to analyze a WhatsApp chat and generate some interesting statistics and visualizations.
 
+## Requirements
+Install required python packages with `pip3 install -r requirements.txt`.
+
 ## Usage
+Export the WhatsApp chat by going to the chat details > Export Chat > Without Media and save it to the `data/` folder.
+Make sure the exported chat is saved as the default name, `_chat.txt`!
 
-Export the WhatsApp chat by going to the chat details > Export Chat > Without Media and save it to the `data/` directory in this repo.
-
-Run `python main.py` with any arguments of visualizations you want to generate.
+Run `python3 main.py` with any arguments of visualizations you want to generate. New visualizations can also be generated later.
 
 A list of possible arguments are listed below.
 
@@ -19,5 +22,3 @@ A list of possible arguments are listed below.
 | `--words` | shows histogram of message word length |
 | `--wordcloud` | shows wordcloud of all messages sent |
 
-
-[TODO](TODO.md)
