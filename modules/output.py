@@ -63,8 +63,7 @@ def show_words(data_frame):
 
 def show_wordcloud(data_frame):
    
-    ignore_words_str = "und der die das dann noch ist ja aber auch jetzt oder ich du nicht vor nach zu bei uns wir den dem denn schon da bin war hab sind wenn mit auf dir haben machen mal gut ein mir dich e es sehr nur für wieder heute wie kann"
-    ignore_list = ignore_words_str.split()
+    ignore_list = const.IGNORE_WORDS.split()
     
     data_frame['message'] = data_frame['message'].astype('string')
 
